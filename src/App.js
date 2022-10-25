@@ -1,5 +1,5 @@
 import React from 'react';
-import Axios from 'axios';
+import axios from 'axios';
 import './App.css';
 import { render } from '@testing-library/react';
 
@@ -9,13 +9,10 @@ class App extends React.Component {
     this.state = {
       city: '',
       cityData: [],
+      error: false,
+      errorMessage: ''
 
     }
-  }
-
-  handleGetCity = (event) => {
-    event.preventDefault();
-    let cityData = axios.get('https://us1.locationiq.com/v1/search?key=YOUR_ACCESS_TOKEN&q=SEARCH_STRING&format=json')
   }
 
   handleInput = (event) => {
@@ -25,22 +22,49 @@ class App extends React.Component {
     })
   }
 
-  getCityData = (event) => {
+
+  handleGetCity = async (event) => {
     event.preventDefault();
+
+    try{
+      let cityDataURL = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`
+      let cityData = await axios.get(cityDataURL);
+  
+      console.log(cityData.data[0]);
+      this.setState({
+        cityData: cityData.data[0],
+        error: false
+      });
+          } catch(error){
+            console.log(error);
+            this.setState({
+              error: true,
+              errorMessage: error.message
+            })
+          }
   }
 
-}
-
-render() {
+  
+render () {
   return (
     <>
     <h1>API Call</h1>
 
-    <form>
-      <button onClick={this.handleGetCity}>Click Me!</button>
+    <form onSubmit={this.handleGetCity}>
+    <label> Pick a city.
+      <input type="text" onInput={this.handleInput}/>
+      <button type='submit'>Let's go!</button>
+    </label>
     </form>
+    {this.state.error
+    ?
+  <p>{this.state.errorMessage}</p>
+  :
+  <p>{this.state.cityData.display_name}</p>
+    }
     </>
-  )
+  );
+}
 }
 
 export default App;
