@@ -16,6 +16,7 @@ class App extends React.Component {
       lon: '',
       error: false,
       errorMessage: '',
+      mapData: ''
     };
   }
 
@@ -33,6 +34,8 @@ class App extends React.Component {
       let cityDataURL = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`;
       let cityData = await axios.get(cityDataURL);
       console.log(cityData);
+      
+      let mapDataURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=13`;
 
       console.log(cityData.data[0]);
       this.setState({
@@ -40,6 +43,7 @@ class App extends React.Component {
         lat: `Latitude: ${cityData.data[0].lat}`,
         lon: `Longitude: ${cityData.data[0].lon}`,
         error: false,
+        mapData: mapDataURL
       });
     } catch (error) {
       console.log(error);
@@ -47,7 +51,7 @@ class App extends React.Component {
         error: true,
         errorMessage: error.message,
       });
-    }
+    }  
   };
 
   render() {
@@ -71,7 +75,7 @@ class App extends React.Component {
           <>
           <Card style={{ width: 'auto' }}>
           <Card.Header>{this.state.cityData.display_name}</Card.Header>
-          {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
+          <Card.Img variant="top" src={this.state.mapData}/>
       <Card.Body>
         <Card.Title></Card.Title>
         <ListGroup variant="flush">
