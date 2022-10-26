@@ -35,7 +35,7 @@ class App extends React.Component {
       let cityData = await axios.get(cityDataURL);
       console.log(cityData);
       
-      let mapDataURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=13`;
+      let mapDataURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${cityData.data[0].lat},${cityData.data[0].lon}&zoom=10`;
 
       console.log(cityData.data[0]);
       this.setState({
@@ -61,7 +61,7 @@ class App extends React.Component {
 
         <form onSubmit={this.handleGetCity}>
           <label>
-            {' '}
+            {'🕵'}
             Pick a city.
             <input type="text" onInput={this.handleInput} />
             <Button style= {{backgroundColor: "paleturquoise"}} variant="outline-dark" type="submit">
