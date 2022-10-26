@@ -4,6 +4,7 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Weather from './Weather.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class App extends React.Component {
       lon: '',
       error: false,
       errorMessage: '',
-      mapData: ''
+      mapData: '',
+      weatherData: []
     };
   }
 
@@ -36,6 +38,8 @@ class App extends React.Component {
       
       let mapDataURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${cityData.data[0].lat},${cityData.data[0].lon}&zoom=10`;
 
+      this.getWeatherData(cityData.data[0]);
+
       console.log(cityData.data[0]);
       this.setState({
         cityData: cityData.data[0],
@@ -52,6 +56,25 @@ class App extends React.Component {
       });
     }  
   };
+
+getWeatherData = async (location) => {
+  try{
+    let weatherDataURL = `${process.env.REACT_APP_SERVER}/weather?cityName=${this.state.city}&lat=${location.lat}&lon=${location.lon}`
+
+    console.log(weatherDataURL);
+
+    let weatherData = await axios.get(weatherDataURL)
+
+    this.setState({
+      weatherData: weatherData.data
+    });
+  } catch (error) {
+this.state({
+error: true,
+errorMessage: error.message
+});
+  }
+}
 
   render() {
     return (
