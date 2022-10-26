@@ -4,7 +4,6 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { render } from '@testing-library/react';
 
 class App extends React.Component {
   constructor(props) {
