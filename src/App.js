@@ -69,10 +69,11 @@ getWeatherData = async (location) => {
       weatherData: weatherData.data
     });
   } catch (error) {
-this.state({
-error: true,
-errorMessage: error.message
-});
+    console.log(error);
+    this.setState({
+      error: true,
+      errorMessage: error.message,
+    });
   }
 }
 
@@ -112,6 +113,9 @@ errorMessage: error.message
             <p>{this.state.lon}</p> */}
           </>
         )}
+        <Weather 
+        weatherData={this.state.weatherData}
+        />
       </>
     );
   }
